@@ -167,7 +167,7 @@ def visualize_maze_pygame(maze):
     pygame.init()
 
     # Создаем окно
-    screen = pygame.display.set_mode((len(maze[0]) * 20, len(maze) * 20))
+    screen = pygame.display.set_mode((len(maze[0]) * 5, len(maze) * 5))
 
     # Задаем цвета
     BLACK = (0, 0, 0)
@@ -177,9 +177,9 @@ def visualize_maze_pygame(maze):
     for i in range(len(maze)):
         for j in range(len(maze[0])):
             if maze[i][j] == '#':
-                pygame.draw.rect(screen, BLACK, (j * 20, i * 20, 20, 20))
+                pygame.draw.rect(screen, BLACK, (j * 5, i * 5, 5, 5))
             else:
-                pygame.draw.rect(screen, WHITE, (j * 20, i * 20, 20, 20))
+                pygame.draw.rect(screen, WHITE, (j * 5, i * 5, 5, 5))
 
     # Обновляем экран
     pygame.display.flip()
@@ -199,7 +199,7 @@ def draw_solution_pygame(solution, screen):
     # Рисуем решение лабиринта
     for point in solution:
         pygame.draw.rect(screen, RED,
-                         (point[1] * 20, point[0] * 20, 20, 20))
+                         (point[1] * 5, point[0] * 5, 5, 5))
 
     # Обновляем экран
     pygame.display.flip()
@@ -273,7 +273,7 @@ def reconstruct_path(came_from, start, goal):
     return path
 
 
-maze = generate(30, 23)
+maze = generate(90, 83)
 print_maze(maze)
 screen = visualize_maze_pygame(maze)
 solution = best_first_search(maze)
