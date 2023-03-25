@@ -1,6 +1,8 @@
 import random
 import pygame
 
+from queue import PriorityQueue
+
 
 def generate(width, height):
     # Проверим ограничения параметров на 0
@@ -13,7 +15,7 @@ def generate(width, height):
         return None
 
     # Инициализируем размер конечной матрицы maze
-    # Ячейки будут представлять из себя фрагменты 2x2 + 1 одно значение
+    # Ячейки будут представлять собой фрагменты 2x2 + 1 одно значение
     # сверху и слева для стен
     output_height = height * 2 + 1
     output_width = width * 2 + 1
@@ -156,12 +158,6 @@ def print_maze(maze):
         print()
 
 
-maze = generate(10, 10)
-
-
-# print_maze(maze)
-
-
 def visualize_maze_pygame(maze):
     # Проверяем указатель на None
     if maze is None:
@@ -188,6 +184,26 @@ def visualize_maze_pygame(maze):
     # Обновляем экран
     pygame.display.flip()
 
+    # Выходим из Pygame
+    # pygame.quit()
+    return screen
+
+
+def draw_solution_pygame(solution, screen):
+    # Проверяем указатель на None
+    if solution is None:
+        return
+
+    RED = (255, 0, 0)
+
+    # Рисуем решение лабиринта
+    for point in solution:
+        pygame.draw.rect(screen, RED,
+                         (point[1] * 20, point[0] * 20, 20, 20))
+
+    # Обновляем экран
+    pygame.display.flip()
+
     # Ожидаем закрытия окна
     running = True
     while running:
@@ -199,5 +215,66 @@ def visualize_maze_pygame(maze):
     pygame.quit()
 
 
+def best_first_search(maze):
+    start = (1, 1)
+    goal = (len(maze) - 2, len(maze[0]) - 2)
+
+    # Создаем очередь с приоритетами и добавляем в нее начальную точку
+    frontier = PriorityQueue()
+    frontier.put(start, False)
+
+    # Словарь для хранения путей
+    came_from = {start: None}
+
+    while not frontier.empty():
+        # Получаем следующую точку из очереди с приоритетами
+        current = frontier.get()
+
+        # Если мы достигли цели, то выходим из цикла
+        if current == goal:
+            break
+
+        # Получаем соседние точки
+        for next in get_neighbors(current, maze):
+            # Если мы еще не были в этой точке
+            if next not in came_from:
+                # Вычисляем приоритет для этой точки
+                priority = heuristic(goal, next)
+                # Добавляем эту точку в очередь с приоритетами
+                frontier.put(next, priority)
+                # Добавляем путь до этой точки в словарь came_from
+                came_from[next] = current
+
+    # Восстанавливаем путь до цели из словаря came_from
+    return reconstruct_path(came_from, start, goal)
+
+
+def get_neighbors(pos, maze):
+    neighbors = []
+    for direction in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+        neighbor = (pos[0] + direction[0], pos[1] + direction[1])
+        if maze[neighbor[0]][neighbor[1]] != '#':
+            neighbors.append(neighbor)
+    return neighbors
+
+
+def heuristic(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+
+def reconstruct_path(came_from, start, goal):
+    current = goal
+    path = []
+    while current != start:
+        path.append(current)
+        current = came_from[current]
+    path.append(start)
+    path.reverse()
+    return path
+
+
+maze = generate(30, 23)
 print_maze(maze)
-visualize_maze_pygame(maze)
+screen = visualize_maze_pygame(maze)
+solution = best_first_search(maze)
+draw_solution_pygame(solution, screen)
