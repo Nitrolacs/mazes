@@ -36,10 +36,6 @@ def visualize_maze(screen, maze, scale):
     # Обновляем экран
     pg.display.flip()
 
-    # Выходим из Pygame
-    # pygame.quit()
-    return screen
-
 
 def draw_solution(screen, solution, scale):
     # Проверяем указатель на None
@@ -54,18 +50,8 @@ def draw_solution(screen, solution, scale):
     # Обновляем экран
     pg.display.flip()
 
-    # Ожидаем закрытия окна
-    running = True
-    while running:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                running = False
 
-    # Выходим из Pygame
-    pg.quit()
-
-
-def visualization_init(maze: [[]], solution: [()]):
+def visualization_init(maze: [[]], solution: [()] = None):
     # Инициализируем Pygame
     pg.init()
 
@@ -76,6 +62,21 @@ def visualization_init(maze: [[]], solution: [()]):
 
     # Создаем окно
     screen = pg.display.set_mode((width * scale, height * scale))
-    print_maze(maze)
+    # print_maze(maze)  # TODO
     visualize_maze(screen, maze, scale)
-    draw_solution(screen, solution, scale)
+
+    if solution:
+        print(f"Путь от начальной до конечной точки:\n{solution}")
+        draw_solution(screen, solution, scale)
+
+    pg.image.save(screen, "screenshot.png")
+
+    # Ожидаем закрытия окна
+    running = True
+    while running:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                running = False
+
+    # Выходим из Pygame
+    pg.quit()
