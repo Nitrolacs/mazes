@@ -26,7 +26,7 @@ def visualize_maze(screen, maze, scale):
     # Рисуем лабиринт
     for i in range(len(maze)):
         for j in range(len(maze[0])):
-            if maze[i][j] == '#':
+            if maze[i][j] == '█':
                 pg.draw.rect(screen, BLACK,
                              (j * scale, i * scale, scale, scale))
             else:
@@ -76,5 +76,6 @@ def visualization_init(maze: [[]], solution: [()]):
 
     # Создаем окно
     screen = pg.display.set_mode((width * scale, height * scale))
+    print_maze(maze)
     visualize_maze(screen, maze, scale)
     draw_solution(screen, solution, scale)
