@@ -145,76 +145,6 @@ def generate(width, height):
     # вернём полученный лабиринт
     return maze
 
-
-def print_maze(maze):
-    # Проверяем указатель на None
-    if maze is None:
-        return
-
-    # Построчно считываем и выводим в консоль
-    for i in range(len(maze)):
-        for j in range(len(maze[0])):
-            print(maze[i][j], end='')
-        print()
-
-
-def visualize_maze_pygame(maze):
-    # Проверяем указатель на None
-    if maze is None:
-        return
-
-    # Инициализируем Pygame
-    pygame.init()
-
-    # Создаем окно
-    screen = pygame.display.set_mode((len(maze[0]) * 5, len(maze) * 5))
-
-    # Задаем цвета
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-
-    # Рисуем лабиринт
-    for i in range(len(maze)):
-        for j in range(len(maze[0])):
-            if maze[i][j] == '#':
-                pygame.draw.rect(screen, BLACK, (j * 5, i * 5, 5, 5))
-            else:
-                pygame.draw.rect(screen, WHITE, (j * 5, i * 5, 5, 5))
-
-    # Обновляем экран
-    pygame.display.flip()
-
-    # Выходим из Pygame
-    # pygame.quit()
-    return screen
-
-
-def draw_solution_pygame(solution, screen):
-    # Проверяем указатель на None
-    if solution is None:
-        return
-
-    RED = (255, 0, 0)
-
-    # Рисуем решение лабиринта
-    for point in solution:
-        pygame.draw.rect(screen, RED,
-                         (point[1] * 5, point[0] * 5, 5, 5))
-
-    # Обновляем экран
-    pygame.display.flip()
-
-    # Ожидаем закрытия окна
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-    # Выходим из Pygame
-    pygame.quit()
-
-
 def best_first_search(maze):
     start = (1, 1)
     goal = (len(maze) - 2, len(maze[0]) - 2)
@@ -273,8 +203,3 @@ def reconstruct_path(came_from, start, goal):
     return path
 
 
-maze = generate(90, 83)
-print_maze(maze)
-screen = visualize_maze_pygame(maze)
-solution = best_first_search(maze)
-draw_solution_pygame(solution, screen)
