@@ -52,10 +52,9 @@ def draw_solution(screen, solution, scale):
 
 
 def visualization_init(maze: [[]], solution: [()] = None,
-                       img_path: str = None):
+                       img_path: str = None, text_path: str = None):
     # Инициализируем Pygame
     pg.init()
-    print(img_path)
     width = len(maze[0])
     height = len(maze)
 
@@ -63,7 +62,6 @@ def visualization_init(maze: [[]], solution: [()] = None,
 
     # Создаем окно
     screen = pg.display.set_mode((width * scale, height * scale))
-    # print_maze(maze)  # TODO
     visualize_maze(screen, maze, scale)
 
     if solution:
@@ -74,6 +72,13 @@ def visualization_init(maze: [[]], solution: [()] = None,
         print(f"Изображение лабиринта сохранено в файл {img_path} в папке "
               f"maze_image")
         pg.image.save(screen, "maze_image/" + img_path)
+
+    if text_path:
+        with open("maze_text/" + text_path, "w", encoding="utf-8") as file:
+            for row in maze:
+                file.write(''.join(row) + "\r\n")
+        print(f"Лабиринт в текстовом формате сохранён в файл {text_path}"
+              f" в папке maze_text")
 
     # Ожидаем закрытия окна
     running = True

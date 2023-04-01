@@ -20,7 +20,10 @@ def check_fields(args: Any) -> bool:
         return False
 
     if args.save_maze_image and args.save_maze_image[-3:] not in ["jpg", "png"]:
-            return False
+        return False
+
+    if args.save_maze_text and args.save_maze_text[-3:] not in ["txt"]:
+        return False
 
     return True
 
@@ -46,7 +49,9 @@ def parse_args() -> None:
                         type=str, help="Выходной файл для сохранения лабиринта"
                                        "в виде изображения (jpg/png)")
 
-    # parser.add_argument("-smt", "--save-maze-text") # TODO
+    parser.add_argument("-smt", "--save-maze-text", dest="save_maze_text",
+                        type=str, help="Выходной файл для сохранения лабиринта"
+                                       "в виде текста (txt)")
 
     # В эту переменную попадает результат разбора аргументов командной строки.
     args = parser.parse_args()
@@ -56,9 +61,11 @@ def parse_args() -> None:
         maze = generate(args.width, args.height)
         if args.solution:
             solution = best_first_search(maze)
-            visualization_init(maze, solution, args.save_maze_image)
+            visualization_init(maze, solution, args.save_maze_image,
+                               args.save_maze_text)
         else:
-            visualization_init(maze, None, args.save_maze_image)
+            visualization_init(maze, img_path=args.save_maze_image,
+                               text_path=args.save_maze_text)
     else:
         print("Переданы неверные аргументы.")
 
