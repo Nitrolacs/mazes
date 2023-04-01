@@ -46,15 +46,16 @@ def draw_solution(screen, solution, scale):
     for point in solution:
         pg.draw.rect(screen, RED,
                      (point[1] * scale, point[0] * scale, scale, scale))
+        # Обновляем экран
+        pg.display.flip()
+        pg.time.wait(30)
 
-    # Обновляем экран
-    pg.display.flip()
 
-
-def visualization_init(maze: [[]], solution: [()] = None):
+def visualization_init(maze: [[]], solution: [()] = None,
+                       img_path: str = None):
     # Инициализируем Pygame
     pg.init()
-
+    print(img_path)
     width = len(maze[0])
     height = len(maze)
 
@@ -69,7 +70,10 @@ def visualization_init(maze: [[]], solution: [()] = None):
         print(f"Путь от начальной до конечной точки:\n{solution}")
         draw_solution(screen, solution, scale)
 
-    pg.image.save(screen, "screenshot.png")
+    if img_path:
+        print(f"Изображение лабиринта сохранено в файл {img_path} в папке "
+              f"maze_image")
+        pg.image.save(screen, "maze_image/" + img_path)
 
     # Ожидаем закрытия окна
     running = True
