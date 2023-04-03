@@ -17,13 +17,12 @@ def calculate_square_size(path_to_file: str):
             for j in range(height):
                 if img.getpixel((i, j)) == (255, 255, 255):
                     diagonal = ((i ** 2 + j ** 2) ** 0.5)
-                    square_size = diagonal / (2 ** 0.5)
-                    return int(square_size)
+                    square_size = int(diagonal / (2 ** 0.5))
+                    return square_size
 
 
 def reading_maze_from_image(path_to_file: str):
     with Image.open(path_to_file) as img:
-
         maze = []
 
         square_size = calculate_square_size(path_to_file)
