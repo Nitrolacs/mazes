@@ -30,7 +30,7 @@ def check_fields(args: Any) -> bool:
 
     if args.load_maze_image and (not os.path.exists(
             args.load_maze_image) or not args.load_maze_image.endswith(
-            ('.png', '.jpg'))):
+        ('.png', '.jpg'))):
         print("Неверный файл.")
         return False
 
@@ -95,9 +95,12 @@ def parse_args() -> None:
             maze = reading_maze_from_image(args.load_maze_image)
 
         if args.solution:
-            solution = best_first_search(maze)
-            visualization_init(maze, solution, args.save_maze_image,
-                               args.save_maze_text)
+            try:
+                solution = best_first_search(maze)
+                visualization_init(maze, solution, args.save_maze_image,
+                                   args.save_maze_text)
+            except (IndexError, KeyError):
+                print("Ошибка выполнения. Завершение программы...")
         else:
             visualization_init(maze, img_path=args.save_maze_image,
                                text_path=args.save_maze_text)
