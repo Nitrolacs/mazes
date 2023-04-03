@@ -1,5 +1,4 @@
 import random
-import pygame
 
 from queue import PriorityQueue
 
@@ -195,7 +194,7 @@ def get_neighbors(pos, maze):
 
 
 def heuristic(a, b):
-    # Вычисляем эвристическую функцию как манхэттенское расстояние
+    # Вычисляем эвристическую функцию как манхеттенское расстояние
     # между двумя точками
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 

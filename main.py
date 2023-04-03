@@ -7,7 +7,8 @@ from typing import Any
 
 from maze import generate, best_first_search
 from visualization import visualization_init
-from reading_maze_from_file import reading_maze_from_text
+from reading_maze_from_file import reading_maze_from_text, \
+    reading_maze_from_image
 
 
 def check_fields(args: Any) -> bool:
@@ -22,12 +23,15 @@ def check_fields(args: Any) -> bool:
             print("Высота лабиринта должна быть от 3 до 400.")
             return False
 
-    if args.load_maze_text and not os.path.exists(args.load_maze_text):
-        print("Такого файла не существует.")
+    if args.load_maze_text and (not os.path.exists(
+            args.load_maze_text) or not args.load_maze_text.endswith('.txt')):
+        print("Неверный файл.")
         return False
 
-    if args.load_maze_image and not os.path.exists(args.load_maze_text):
-        print("Такого файла не существует.")
+    if args.load_maze_image and (not os.path.exists(
+            args.load_maze_image) or not args.load_maze_image.endswith(
+            ('.png', '.jpg'))):
+        print("Неверный файл.")
         return False
 
     if args.save_maze_image and (args.save_maze_image[-3:] not in ["jpg",
@@ -86,6 +90,9 @@ def parse_args() -> None:
 
         elif args.load_maze_text:
             maze = reading_maze_from_text(args.load_maze_text)
+
+        elif args.load_maze_image:
+            maze = reading_maze_from_image(args.load_maze_image)
 
         if args.solution:
             solution = best_first_search(maze)
