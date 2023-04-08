@@ -1,7 +1,7 @@
 # файл test_generate.py
 import pytest
 from pytest_mock import MockerFixture
-from maze import generate  # импортируем модуль с функцией generate
+from maze import generate, best_first_search
 
 
 # Указываем, какие аргументы и значения нужно передать в функцию тесты.
@@ -12,6 +12,7 @@ from maze import generate  # импортируем модуль с функци
         "height",
         "width",
         "maze",  # ожидаемый лабиринт
+        "solution",  # ожидаемое решение лабиринта
     ],
     argvalues=[
         [  # тестовый случай 1
@@ -26,6 +27,11 @@ from maze import generate  # импортируем модуль с функци
                 ['█', ' ', '█', ' ', '█', ' ', '█'],
                 ['█', '█', '█', '█', '█', '█', '█']
             ],
+            [
+                # решение лабиринта
+                (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (2, 5), (3, 5),
+                (4, 5), (5, 5)
+            ]
         ],
         [  # тестовый случай 2
             2,  # высота
@@ -37,6 +43,10 @@ from maze import generate  # импортируем модуль с функци
                 ['█', ' ', '█', ' ', '█', ' ', '█', ' ', '█'],
                 ['█', '█', '█', '█', '█', '█', '█', '█', '█']
             ],
+            [ # решение лабиринта
+                (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6),
+                (1, 7), (2, 7), (3, 7)
+            ]
         ],
         [  # тестовый случай 3
             1,  # высота
@@ -46,18 +56,22 @@ from maze import generate  # импортируем модуль с функци
                 ['█', ' ', '█'],
                 ['█', '█', '█']
             ],
+            [  # решение лабиринта
+                (1, 1)
+            ],
         ],
     ]
 )
 def test_generation_and_solution(mocker: MockerFixture, height: int, width: int,
-                                 maze: list) -> None:
+                                 maze: list, solution: list) -> None:
     """
-
+    Функция для тестирования генерации и решения лабиринта.
     :param mocker: Позволяет подменять результаты других функций на фиктивные
     :param height: Высота
     :param width: Ширина
     :param maze: Ожидаемый лабиринт
-    :return:
+    :param solution: Ожидаемое решение
+    :return: None
     """
     mocker.patch(
         "random.randint",
@@ -72,4 +86,7 @@ def test_generation_and_solution(mocker: MockerFixture, height: int, width: int,
     #  Если нет, то тест выдает ошибку
     actual_maze = generate(width,
                            height)  # вызываем функцию с заданными параметрами
-    assert maze == actual_maze  # сравниваем ожидаемый и фактический результат
+    actual_solution = best_first_search(
+        actual_maze)  # вызываем функцию поиска решения с полученным лабиринтом
+
+    assert all([maze == actual_maze, solution == actual_solution])
