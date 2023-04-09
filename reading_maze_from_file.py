@@ -1,7 +1,14 @@
+"""Чтение лабиринта из файлов"""
+
 from PIL import Image
 
 
-def reading_maze_from_text(path_to_file: str):
+def reading_maze_from_text(path_to_file: str) -> [[]]:
+    """
+    Чтение лабиринта из файла.
+    :param path_to_file: Путь к файлу
+    :return: None
+    """
     maze = []
     with open(path_to_file, "r", encoding="utf-8") as file:
         for line in file:
@@ -10,18 +17,29 @@ def reading_maze_from_text(path_to_file: str):
     return maze
 
 
-def calculate_square_size(path_to_file: str):
+def calculate_square_size(path_to_file: str) -> int:
+    """
+    Возвращает размер одного квадрата на изображении лабиринта.
+    :param path_to_file: Путь к файлу
+    :return: Размер квадрата
+    """
     with Image.open(path_to_file) as img:
         width, height = img.size
         for i in range(width):
             for j in range(height):
                 if img.getpixel((i, j)) == (255, 255, 255):
-                    diagonal = ((i ** 2 + j ** 2) ** 0.5)
+                    diagonal = (i ** 2 + j ** 2) ** 0.5
                     square_size = int(diagonal / (2 ** 0.5))
                     return square_size
+    return 0
 
 
-def reading_maze_from_image(path_to_file: str):
+def reading_maze_from_image(path_to_file: str) -> [[]]:
+    """
+    Чтение лабиринта из изображения
+    :param path_to_file: Путь к файлу
+    :return:
+    """
     with Image.open(path_to_file) as img:
         maze = []
 

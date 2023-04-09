@@ -1,3 +1,5 @@
+"""Функции для визуализации лабиринта и его решения"""
+
 import pygame as pg
 
 # Задаем цвета
@@ -6,27 +8,23 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 
 
-def print_maze(maze):
-    # Проверяем указатель на None
-    if maze is None:
-        return
+def visualize_maze(screen: pg.display, maze: [[]], scale: int) -> None:
+    """
+    Визуализация лабиринта
+    :param screen: Окно, в котором будет рисоваться лабиринт
+    :param maze: Двумерный массив
+    :param scale: Модификатор размера изображения
+    :return: None
+    """
 
-    # Построчно считываем и выводим в консоль
-    for i in range(len(maze)):
-        for j in range(len(maze[0])):
-            print(maze[i][j], end='')
-        print()
-
-
-def visualize_maze(screen, maze, scale):
     # Проверяем указатель на None
     if maze is None:
         return
 
     # Рисуем лабиринт
-    for i in range(len(maze)):
-        for j in range(len(maze[0])):
-            if maze[i][j] == '█':
+    for i, row in enumerate(maze):
+        for j, cell in enumerate(row):
+            if cell == '█':
                 pg.draw.rect(screen, BLACK,
                              (j * scale, i * scale, scale, scale))
             else:
@@ -37,7 +35,14 @@ def visualize_maze(screen, maze, scale):
     pg.display.flip()
 
 
-def draw_solution(screen, solution, scale):
+def draw_solution(screen, solution, scale) -> None:
+    """
+    Визуализация решения лабиринта.
+    :param screen: Окно, в котором будет рисоваться решение.
+    :param solution: Решение лабиринта.
+    :param scale: Модификатор размера лабиринта.
+    :return: None
+    """
     # Проверяем указатель на None
     if solution is None:
         return
@@ -52,7 +57,15 @@ def draw_solution(screen, solution, scale):
 
 
 def visualization_init(maze: [[]], solution: [()] = None,
-                       img_path: str = None, text_path: str = None):
+                       img_path: str = None, text_path: str = None) -> None:
+    """
+    Инициализация визуализации.
+    :param maze: Лабиринт
+    :param solution: Решение
+    :param img_path: Путь до изображения
+    :param text_path: Путь до текстового файла
+    :return: None
+    """
     # Инициализируем Pygame
     pg.init()
     width = len(maze[0])

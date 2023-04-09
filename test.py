@@ -1,16 +1,17 @@
-# файл test_generate.py
+"""Файл с тестами"""
+
 import pytest
 from pytest_mock import MockerFixture
 from maze import generate, best_first_search
 
 
 # Указываем, какие аргументы и значения нужно передать в функцию тесты.
-# Будет передавать высоту, ширину и ожидаемый лабиринт для каждого
-# тестового случая
+# Будет передавать высоту, ширину, ожидаемый лабиринт для каждого
+# тестового случая и ожидаемое решение
 @pytest.mark.parametrize(
     argnames=[
-        "height",
-        "width",
+        "height",  # высота лабиринта
+        "width",  # ширина лабиринта
         "maze",  # ожидаемый лабиринт
         "solution",  # ожидаемое решение лабиринта
     ],
@@ -43,7 +44,7 @@ from maze import generate, best_first_search
                 ['█', ' ', '█', ' ', '█', ' ', '█', ' ', '█'],
                 ['█', '█', '█', '█', '█', '█', '█', '█', '█']
             ],
-            [ # решение лабиринта
+            [  # решение лабиринта
                 (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6),
                 (1, 7), (2, 7), (3, 7)
             ]
@@ -62,7 +63,7 @@ from maze import generate, best_first_search
         ],
     ]
 )
-def test_generation_and_solution(mocker: MockerFixture, height: int, width: int,
+def test_generation_and_solution(mocker: MockerFixture, height: int, width:int,
                                  maze: list, solution: list) -> None:
     """
     Функция для тестирования генерации и решения лабиринта.
@@ -75,13 +76,13 @@ def test_generation_and_solution(mocker: MockerFixture, height: int, width: int,
     """
     mocker.patch(
         "random.randint",
-        # подменяем функцию генерации случайных чисел на фиксированную
+        # Подменяем функцию генерации случайных чисел на фиксированную
         side_effect=lambda a, b: a + b - 1
-        # возвращаем всегда максимальное значение из диапазона
+        # Возвращаем всегда максимальное значение из диапазона
         # Это нужно для того, чтобы генерация лабиринта была детерминированной
         # и не зависела от случайности.
     )
-    #  Вызываем функцию generate с заданными параметрами и сравниваем полученный
+    #  Вызываем функцию generate с заданными параметрами, сравниваем полученный
     #  лабиринт с ожидаемым. Если они совпадают, то тест проходит успешно.
     #  Если нет, то тест выдает ошибку
     actual_maze = generate(width,

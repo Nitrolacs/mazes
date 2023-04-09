@@ -12,7 +12,11 @@ from reading_maze_from_file import reading_maze_from_text, \
 
 
 def check_fields(args: Any) -> bool:
-    """Проверка переданных аргументов"""
+    """
+    Проверка переданных аргументов
+    :param args: Аргументы
+    :return: Булевое значение
+    """
 
     if args.width_height:
         if args.width_height[0] not in range(3, 401):
@@ -30,7 +34,7 @@ def check_fields(args: Any) -> bool:
 
     if args.load_maze_image and (not os.path.exists(
             args.load_maze_image) or not args.load_maze_image.endswith(
-        ('.png', '.jpg'))):
+            ('.png', '.jpg'))):
         print("Неверный файл.")
         return False
 
@@ -47,7 +51,10 @@ def check_fields(args: Any) -> bool:
 
 
 def parse_args() -> None:
-    """Обработка параметров командной строки"""
+    """
+    Обработка параметров командной строки
+    :return: None
+    """
     # Осуществляем разбор аргументов командной строки
     parser = argparse.ArgumentParser(description="Сжатие изображений на основе"
                                                  " квадродеревьев")
@@ -57,7 +64,7 @@ def parse_args() -> None:
     group = parser.add_mutually_exclusive_group(required=True)
 
     group.add_argument('-wh', '--width_height', nargs=2, dest="width_height",
-                       type=int, help='Ширина и высота лабиринта (от 3 до 400)')
+                       type=int,help='Ширина и высота лабиринта (от 3 до 400)')
 
     group.add_argument('-lmi', '--load-maze-image', dest="load_maze_image",
                        type=str,
@@ -92,7 +99,10 @@ def parse_args() -> None:
             maze = reading_maze_from_text(args.load_maze_text)
 
         elif args.load_maze_image:
-            maze = reading_maze_from_image(args.load_maze_image)
+            try:
+                maze = reading_maze_from_image(args.load_maze_image)
+            except ValueError:
+                pass
 
         if args.solution:
             try:
@@ -108,8 +118,11 @@ def parse_args() -> None:
         print("Переданы неверные аргументы.")
 
 
-def main():
-    """Точка входа"""
+def main() -> None:
+    """
+    Точка входа
+    :return: None
+    """
     parse_args()
 
 
